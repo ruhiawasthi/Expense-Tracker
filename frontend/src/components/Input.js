@@ -16,7 +16,7 @@ function Input({ setCallGetExpense, callGetExpense , setOpenBackDrop, openBackDr
     const [message, setMessage] = useState('');
     const [severity, setSeverity] = useState('error');
  
-
+//addexpense fun
     function addExpense() {
         if (name == null || name == '') {
             setOpen(true);
