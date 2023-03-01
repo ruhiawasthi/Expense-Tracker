@@ -6,24 +6,20 @@ import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { Grid } from "@mui/material";
+import TextField from '@mui/material/TextField';
 
-
-function Input({ setCallGetExpense, callGetExpense , setOpenBackDrop, openBackDrop}) {
+function Input({ setCallGetExpense, callGetExpense, setOpenBackDrop, openBackDrop, setOpen, setMessage, setSeverity, open, message, severity }) {
     const navigate = useNavigate();
     const [name, setName] = useState('');
     const [amount, setAmount] = useState('');
-    const [open, setOpen] = useState(false);
-    const [message, setMessage] = useState('');
-    const [severity, setSeverity] = useState('error');
- 
-//addexpense fun
+
+    //addexpense fun
     function addExpense() {
         if (name == null || name == '') {
             setOpen(true);
             setMessage("Invalid value of Name")
             setSeverity('error')
             return;
-
         }
         if (amount == null || amount == '' || isNaN(amount)) {
             setOpen(true);
@@ -31,7 +27,6 @@ function Input({ setCallGetExpense, callGetExpense , setOpenBackDrop, openBackDr
             setSeverity('error')
             return;
         }
-        
         setOpenBackDrop(true);
 
         console.log("abc");
@@ -41,6 +36,12 @@ function Input({ setCallGetExpense, callGetExpense , setOpenBackDrop, openBackDr
         },).then((response) => {
             console.log("addExpense is working");
             setCallGetExpense(!callGetExpense)
+            setOpen(true)
+            setSeverity('success')
+            setMessage('Expense Added Succesfully')
+            setName('')
+            setAmount('')
+
         });
         setOpenBackDrop(false);
     }
@@ -55,25 +56,26 @@ function Input({ setCallGetExpense, callGetExpense , setOpenBackDrop, openBackDr
                     {message}
                 </Alert>
             </Snackbar>
-            <Grid container sx={{justifyContent:'center',alignItems:'center', height:'20%', marginBottom:'20px'}}>
-            <div style={{backgroundColor:'#fff', width:'30%', justifyContent:'center', alignItems:'center', position:'relative'}}>
-            <form >
-                <div className="input-group">
-                    <label htmlFor="name">Name</label>
-                    <input type="text" id="name" onChange={(e) => setName(e.target.value)} />
-                    
-                </div>
+            <Grid container sx={{ justifyContent: 'center', alignItems: 'center', height: '20%', marginBottom: '20px' }}>
+                <div style={{ backgroundColor: '#fff', width: '30%', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
+                    <form >
+                        <div className="input-group">
+                            <TextField id="name" label="Name" variant="outlined" type="text" value={name} onChange={(e) => setName(e.target.value)} />
+                            {/* <input  id="name" value={name} onChange={(e) => setName(e.target.value)} /> */}
 
-                <div className="input-group">
-                    <label htmlFor="amount">Amount</label>
-                    <input type="number" id="amount" onChange={(e) => setAmount(e.target.value)} />
-                </div>
-                <div style={{ justifyContent: "center", marginTop: '35px' }}>
+                        </div>
 
-                    <Button variant="contained" onClick={() => {addExpense() }}>submit</Button>
+                        <div className="input-group">
+
+                            <TextField id="amount" label="Amount" variant="outlined" type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
+                            {/* <input type="number" id="amount"  /> */}
+                        </div>
+                        <div style={{ justifyContent: "center", marginTop: '35px' }}>
+
+                            <Button variant="contained" onClick={() => { addExpense() }}>submit</Button>
+                        </div>
+                    </form>
                 </div>
-            </form>
-            </div>
             </Grid>
         </div>
 
