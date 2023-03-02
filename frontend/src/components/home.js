@@ -7,9 +7,13 @@ import Input from './Input';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import NavBar from './Navbar';
+import Stack from '@mui/material/Stack';
 import './Expense.css';
 import Button from '@mui/material/Button';
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
+import { Row } from 'react-bootstrap';
 
 
 function Home() {
@@ -20,6 +24,7 @@ function Home() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('error');
+  const [openWarning, setOpenWarning] = useState(false);
 
   function getExpense() {
     setOpenBackDrop(true)
@@ -45,6 +50,7 @@ function Home() {
   }
 
   function clearAll() {
+
     axios.post('/clearAll', {}).then((response) => {
       if (response.data.success) {
         setCallGetExpense(!callGetExpense)
@@ -59,6 +65,23 @@ function Home() {
         setCallGetExpense(!callGetExpense)
       }
     })
+
+    setOpenWarning(false);
+  }
+  
+
+  function handleClearALL()
+  {
+    if(expense.length == 0)
+    {
+      setOpen(true)
+      setSeverity('warning')
+      setMessage('All expenses are already cleared')
+    }
+    else{
+      setOpenWarning(true);
+    }   
+
   }
 
   useEffect(() => {
@@ -77,8 +100,23 @@ function Home() {
 
       <Input setCallGetExpense={setCallGetExpense} callGetExpense={callGetExpense} setOpenBackDrop={setOpenBackDrop} openBackDrop={openBackDrop} setOpen={setOpen} setMessage={setMessage} setSeverity={setSeverity} open={open} message={message} severity={severity} />
       <Grid container item xs={8.3} sx={{ marginRight: '0px' }} alignItems="center" justifyContent="flex-end">
-        <Button variant="contained" sx={{ height: '40px', marginRight: '0px', marginBottom: '10px' }} onClick={clearAll}>Clear ALL</Button>
+        <Button variant="contained" sx={{ height: '40px', marginRight: '0px', marginBottom: '10px' }} onClick={handleClearALL} >Clear ALL</Button>
       </Grid>
+
+      <Dialog
+        open={openWarning}
+        onClose={()=>{setOpenWarning(false)}}
+      >
+        <DialogTitle id="alert-dialog-title">
+          {" Are you sure that you want to clear all expenses?"}
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={()=>{setOpenWarning(false)}}>No</Button>
+          <Button onClick={clearAll} autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <div id="App" >
         {
@@ -86,6 +124,7 @@ function Home() {
             return (< Expense name={item.name} amount={item.amount} id={item._id} setCallGetExpense={setCallGetExpense} callGetExpense={callGetExpense} setOpenBackDrop={setOpenBackDrop} openBackDrop={openBackDrop} setOpen={setOpen} setMessage={setMessage} setSeverity={setSeverity} />);
 
           })}
+     
         <div>
           <Backdrop
             sx={{ color: '#fff' }}

@@ -30,9 +30,9 @@ export default function Expense(props) {
         props.setOpenBackDrop(false);
     }
     return (
-        <Grid sx={{ marginTop: '5px' }} container justifyContent="center">
-            <Card sx={{ width: '40%' }}>
-                <Stack direction="row" spacing={10}>
+        <Grid sx={{ marginTop: '5px' }} container justifyContent="center" >
+            <Card sx={{ width: '40%'}}>
+                <Stack direction="row" spacing={10} >
                     <Grid item xs={15} sx={{ marginLeft: '10px' }} >
                         <h2>{props.name} - $ {props.amount}</h2>
                     </Grid>
